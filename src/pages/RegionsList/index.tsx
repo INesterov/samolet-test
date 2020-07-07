@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Layout, Table } from 'antd'
+import { Layout, Table, Input } from 'antd'
+import debounce from 'debounce'
 import useSelector from '../../helpers/useSelector'
 import { loadLibraryDataAction } from '../../modules/libraryData/ducks'
 
@@ -9,6 +10,7 @@ const { Content } = Layout
 const RegionsList = () => {
   const { isLoading, data } = useSelector(state => state.libraryData)
   const dispatch = useDispatch()
+  const [searchText, changeSearchText] = useState('')
 
   useEffect(() => {
     dispatch(loadLibraryDataAction())
@@ -25,19 +27,32 @@ const RegionsList = () => {
       title: 'Библиотеки',
       dataIndex: 'libraries',
       width: '30%',
-      sorter: (a: any, b: any) => a.library - b.library,
+      sorter: (a: any, b: any) => a.libraries - b.libraries,
     },
   ]
+
+  const handleChange = debounce((value: string) => {
+    changeSearchText(value)
+  })
+
+  const arrayData = Array.from(data.values())
+  const tableData = searchText
+    ? arrayData.filter((value) => {
+      return value.territory.match(searchText)
+    }) : arrayData
 
   return (
     <Layout>
       <Content>
         <Table
           bordered
-          dataSource={Array.from(data.values())}
+          dataSource={tableData}
           loading={isLoading}
           columns={columns}
           rowKey={(item) => String(item.order)}
+          title={() => (
+            <Input placeholder="Поиск по региону" onChange={(e) => handleChange(e.target.value)} />
+          )}
         >
 
         </Table>
