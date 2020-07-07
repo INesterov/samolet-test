@@ -39,7 +39,7 @@ const RegionsList = () => {
 
   const handleChange = debounce((value: string) => {
     changeSearchText(value)
-  })
+  }, 250)
 
   const arrayData = Array.from(data.values())
   const tableData = searchText
