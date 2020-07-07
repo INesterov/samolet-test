@@ -5,4 +5,6 @@ const rootReducer = combineReducers({
   libraryData: libraryDataReducer,
 })
 
+export type RootState = ReturnType<typeof rootReducer>
+
 export default rootReducer
