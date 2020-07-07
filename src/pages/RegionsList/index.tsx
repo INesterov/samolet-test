@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { Layout, Table, Input } from 'antd'
 import debounce from 'debounce'
 import useSelector from '../../helpers/useSelector'
@@ -22,6 +23,11 @@ const RegionsList = () => {
       dataIndex: 'territory',
       key: 'territory',
       width: '70%',
+      render: function RegionLink(text: string, record: any) {
+        const { order } = record
+
+        return <Link to={`/region/${order}`}>{text}</Link>
+      },
     },
     {
       title: 'Библиотеки',
